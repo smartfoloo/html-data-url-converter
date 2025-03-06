@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Data URL Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rosewater: #f5e0dc;
+      --flamingo: #f2cdcd;
+      --pink: #f5c2e7;
+      --mauve: #cba6f7;
+      --red: #f38ba8;
+      --maroon: #eba0ac;
+      --peach: #fab387;
+      --yellow: #f9e2af;
+      --green: #a6e3a1;
+      --teal: #94e2d5;
+      --sky: #89dceb;
+      --sapphire: #74c7ec;
+      --blue: #89b4fa;
+      --lavender: #b4befe;
+      --text: #cdd6f4;
+      --subtext1: #bac2de;
+      --subtext0: #a6adc8;
+      --overlay2: #9399b2;
+      --overlay1: #7f849c;
+      --overlay0: #6c7086;
+      --surface2: #585b70;
+      --surface1: #45475a;
+      --surface0: #313244;
+      --base: #1e1e2e;
+      --mantle: #181825;
+      --crust: #11111b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Geist';
+    }
+
+    body {
+      background-color: var(--crust);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--mauve), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: var(--subtext1);
+      font-size: 1rem;
+    }
+
+    .card {
+      background-color: var(--mantle);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--lavender);
+      font-weight: 600;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    textarea,
+    .output-box {
+      width: 100%;
+      background-color: var(--crust);
+      color: var(--text);
+      border: 1px solid var(--surface0);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.9rem;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    textarea:focus {
+      border-color: var(--mauve);
+    }
+
+    textarea {
+      height: 200px;
+    }
+
+    .output-box {
+      height: 100px;
+      overflow-y: auto;
+      word-break: break-all;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    button {
+      background-color: var(--mauve);
+      color: var(--base);
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--pink);
+    }
+
+    button.secondary {
+      background-color: var(--surface1);
+      color: var(--text);
+    }
+
+    button.secondary:hover {
+      background-color: var(--surface2);
+    }
+
+    .success-message {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--green);
+      color: var(--base);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .success-message.show {
+      opacity: 1;
+    }
+
+    footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      color: var(--subtext0);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 1rem;
+      }
+
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .button-group {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>HTML Data URL Converter</h1>
+      <p class="subtitle">Convert HTML to data:text/html URLs</p>
+    </header>
+
+    <div class="card">
+      <label for="html-input" class="label">HTML Input</label>
+      <textarea id="html-input" placeholder="Enter your HTML here..."><h1>Hello World</h1></textarea>
+    </div>
+
+    <div class="card">
+      <div class="header-row">
+        <label for="data-url" class="label">Data URL Output</label>
+        <div class="button-group">
+          <button id="preview-btn" class="secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            Preview
+          </button>
+          <button id="copy-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+            </svg>
+            Copy URL
+          </button>
+        </div>
+      </div>
+      <div id="data-url" class="output-box"></div>
+    </div>
+  </div>
+
+  <div id="success-message" class="success-message">Copied to clipboard!</div>
+
+  <footer>
+    <p>Built with Catppuccin Mocha colors 🐱</p>
+  </footer>
+
+  <script>
+
+    const htmlInput = document.getElementById('html-input');
+    const dataUrlOutput = document.getElementById('data-url');
+    const copyBtn = document.getElementById('copy-btn');
+    const previewBtn = document.getElementById('preview-btn');
+    const successMessage = document.getElementById('success-message');
+
+    function convertToDataUrl() {
+      const html = htmlInput.value;
+      const encoded = encodeURIComponent(html);
+      const dataUrl = `data:text/html,${encoded}`;
+      dataUrlOutput.textContent = dataUrl;
+      return dataUrl;
+    }
+
+    convertToDataUrl();
+
+    htmlInput.addEventListener('input', convertToDataUrl);
+
+    copyBtn.addEventListener('click', () => {
+      const dataUrl = convertToDataUrl();
+      navigator.clipboard.writeText(dataUrl).then(() => {
+        successMessage.classList.add('show');
+        setTimeout(() => {
+          successMessage.classList.remove('show');
+        }, 2000);
+      });
+    });
+
+    previewBtn.addEventListener('click', () => {
+      const dataUrl = convertToDataUrl();
+      window.open(dataUrl, '_blank');
+    });
+  </script>
+</body>
+
+</html>
